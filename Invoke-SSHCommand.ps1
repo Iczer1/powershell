@@ -67,7 +67,9 @@ function Invoke-SSHCommand{
         $Result = New-Item -ItemType Directory $env:SystemDrive\$FileGuid 
         $Result = Copy-Item $PLINK $env:SystemDrive\$FileGuid 
         $Result = Invoke-Expression "cmd.exe /c echo y | $env:SystemDrive\$FileGuid\Plink.exe $HostName > null"  
-        $Result = Remove-Item $env:SystemDrive\$FileGuid -Recurse -Force 
+        #Didn't work well in my PSv2 env due to path formation, stills fails due to access issue. Investigating
+        #$Result = Remove-Item $env:SystemDrive\$FileGuid -Recurse -Force
+		$Result = Remove-Item ($env:SystemDrive + "\" + $FileGuid.Guid) -Recurse -Force
      } 
  
     # Create temp file to capture any errors produced by plink.exe since these don't come through in SMA currently. 
